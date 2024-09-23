@@ -1,6 +1,5 @@
 #include "SDL.h"
 #include <stdio.h>
-#include <malloc.h>
 
 #define WINDOW_HEIGHT 640
 #define WINDOW_WIDTH 480
@@ -10,6 +9,8 @@
 
 #define CELL_HEIGHT 10
 #define CELL_WIDTH 10
+
+#define LOOP_DELAY 500
 
 void Initialization();
 void MainLoop();
@@ -94,7 +95,7 @@ void MainLoop() {
 
         // Render
         SDL_RenderPresent(renderer);
-        SDL_Delay(1000);
+        SDL_Delay(LOOP_DELAY);
     }
 }
 
