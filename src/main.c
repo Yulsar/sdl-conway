@@ -187,5 +187,6 @@ void CalculateGrid() {
 
 void Cleanup() {
     SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(renderer);
     SDL_Quit();
 }
