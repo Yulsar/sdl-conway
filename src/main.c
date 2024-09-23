@@ -1,5 +1,6 @@
 #include "SDL.h"
 #include <stdio.h>
+#include <malloc.h>
 
 #define WINDOW_HEIGHT 640
 #define WINDOW_WIDTH 480
@@ -52,16 +53,23 @@ void Initialization() {
 
 int running = 1;
 
+typedef struct cell {
+    int state;
+    int x, y;
+} cell;
+
 void Render() {
-    SDL_Rect rect[2];
-    rect[0].x = 100;
-    rect[0].y = 50;
-    rect[0].h = CELL_HEIGHT;
-    rect[0].w = CELL_WIDTH;
-    rect[1].x = 200;
-    rect[1].y = 50;
-    rect[1].h = CELL_HEIGHT;
-    rect[1].w = CELL_WIDTH;
+    cell grid[2];
+    grid[0].state = 1;
+    grid[0].x = 100;
+    grid[0].y = 0;
+    grid[1].state = 1;
+    grid[1].x = 200;
+    grid[1].y = 0;
+    
+    SDL_Rect rect;
+    rect.h = CELL_WIDTH;
+    rect.w = CELL_HEIGHT;
     while (running) {
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -77,8 +85,14 @@ void Render() {
 
         // Draw cells
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        for (int i = 0; i < sizeof(rect) / sizeof(SDL_Rect); i++) {
-            SDL_RenderFillRect(renderer, &rect[i]);
+        for (int i = 0; i < sizeof(grid) / sizeof(cell); i++) {
+            if (grid[i].state) {
+                rect.x = grid[i].x;
+                rect.y = grid[i].y;
+                grid[i].x += 1;
+
+                SDL_RenderFillRect(renderer, &rect);
+            }
         }
 
         // Render
