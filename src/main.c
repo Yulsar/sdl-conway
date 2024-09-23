@@ -1,5 +1,6 @@
 #include "SDL.h"
 #include <stdio.h>
+#include <malloc.h>
 
 #define WINDOW_HEIGHT 640
 #define WINDOW_WIDTH 480
@@ -16,6 +17,9 @@ void Initialization();
 void MainLoop();
 void SeedGrid();
 void CalculateGrid();
+int GetXDir(int i);
+int GetYDir(int i);
+void GetDirs(int i, int *x, int *y);
 void Cleanup();
 
 SDL_Window *window = NULL;
@@ -105,6 +109,7 @@ void SeedGrid() {
     grid[6][6] = 1;
 }
 
+
 void CalculateGrid() {
     int grid_copy[GRID_WIDTH][GRID_HEIGHT];
     for (int x = 0; x < GRID_WIDTH; x++) {
@@ -112,50 +117,9 @@ void CalculateGrid() {
             int neighbors = 0;
             for (int i = 0; i < 8; i++) {
 
-                int x_dir;
-                int y_dir;
-                switch (i) {
-                    case 0: {
-                        x_dir = 0;
-                        y_dir = 1;
-                        break;
-                    }
-                    case 1: {
-                        x_dir = 1;
-                        y_dir = 1;
-                        break;
-                    }
-                    case 2: {
-                        x_dir = 1;
-                        y_dir = 0;
-                        break;
-                    }
-                    case 3: {
-                        x_dir = 1;
-                        y_dir = -1;
-                        break;
-                    }
-                    case 4: {
-                        x_dir = 0;
-                        y_dir = -1;
-                        break;
-                    }
-                    case 5: {
-                        x_dir = -1;
-                        y_dir = -1;
-                        break;
-                    }
-                    case 6: {
-                        x_dir = -1;
-                        y_dir = 0;
-                        break;
-                    }
-                    case 7: {
-                        x_dir = -1;
-                        y_dir = 1;
-                        break;
-                    }
-                }
+                int x_dir = 0;
+                int y_dir = 0;
+                GetDirs(i, &x_dir, &y_dir);
                 if (x + x_dir < 0 || x + x_dir >= GRID_WIDTH || y + y_dir < 0 || y + y_dir >= GRID_HEIGHT)
                 continue;
 
@@ -183,6 +147,32 @@ void CalculateGrid() {
         for (int y = 0; y < GRID_HEIGHT; y++) {
             grid[x][y] = grid_copy[x][y];
         }
+    }
+}
+
+// 6 7 0
+// 5   1
+// 4 3 2
+
+void GetDirs(int i, int *x, int *y) {
+    if (i < 3) {
+        *x = 1;
+    }
+    else if (i == 3 || i == 7) {
+        *x = 0;
+    }
+    else {
+        *x = -1;
+    }
+
+    if (i == 0 || i > 5) {
+        *y = 1;
+    }
+    else if (i == 1 || i == 5) {
+        *y = 0;
+    }
+    else {
+        *y = -1;
     }
 }
 
