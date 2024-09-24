@@ -6,9 +6,9 @@ The only dependency is SDL2.
 
 ## Building
 To build, simply run the build.sh script in the root directory of the repository.
-'''bash
+```bash
 bash build.sh
-'''
+```
 
 ## Running
 After building with build.sh, simply run ./bin/main
