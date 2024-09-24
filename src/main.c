@@ -153,20 +153,15 @@ void CalculateGrid() {
                 neighbors += grid[x + x_dir][y + y_dir];
             }
             if (grid[x][y] == 1) {
-                if (neighbors < 2) {
-                    grid_copy[x][y] = 0;
-                }
-                else if (neighbors == 2 || neighbors == 3) {
+                if (neighbors == 2 || neighbors == 3) {
                     grid_copy[x][y] = 1;
                 }
-                else if (neighbors > 3) {
+                else {
                     grid_copy[x][y] = 0;
                 }
             }
-            else {
-                if (neighbors == 3) {
-                    grid_copy[x][y] = 1;
-                }
+            else if (neighbors == 3) {
+                grid_copy[x][y] = 1;
             }
         }
     }
