@@ -67,20 +67,26 @@ int grid[GRID_WIDTH][GRID_HEIGHT];
 
 void MainLoop() {
     SeedGrid();
+
+    // The rect used for drawing the cells
     SDL_Rect rect;
     rect.h = CELL_WIDTH;
     rect.w = CELL_HEIGHT;
-
+    
+    // Used for calculating each frame the grid is to be updated
     double frame_progress;
     int now = SDL_GetPerformanceCounter();
     int last = 0;
     double delta_time = 0;
 
     while (running) {
+        // Calculate frame progress
         last = now;
         now = SDL_GetPerformanceCounter();
         delta_time = (double)((now - last)*1000 / (double)SDL_GetPerformanceFrequency());
         frame_progress += delta_time;
+
+        // Check if the user attempts to quit the program
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
@@ -89,17 +95,23 @@ void MainLoop() {
                 }
             }
         }
-        if (frame_progress >= LOOP_DELAY) {
-            frame_progress -= LOOP_DELAY;
 
+        // Only update if time since last update is equal to or greater than LOOP_DELAY
+        if (frame_progress >= LOOP_DELAY) {
+            // Subtract LOOP_DELAY from current progress
+            // This way, anything that exceeds LOOP_DELAY is pushed to the next frame
+            frame_progress -= LOOP_DELAY;
+            
+            // Calculate new grid layout
             CalculateGrid();
+
             // Draw background
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
             SDL_RenderClear(renderer);
 
-            // Draw cells
+            // Set draw color for cells
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-            
+            // Check each cell if it is active, if it is, then set the position of the rect equal to it and render it
             for (int x = 0; x < GRID_WIDTH; x++) {
                 for (int y = 0; y < GRID_HEIGHT; y++) {
                     if (grid[x][y]) {
@@ -118,8 +130,10 @@ void MainLoop() {
 
 void SeedGrid() {
     grid[4][6] = 1;
-    grid[5][6] = 1;
-    grid[6][6] = 1;
+    grid[5][7] = 1;
+    grid[3][8] = 1;
+    grid[4][8] = 1;
+    grid[5][8] = 1;
 }
 
 
