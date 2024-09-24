@@ -70,7 +70,17 @@ void MainLoop() {
     SDL_Rect rect;
     rect.h = CELL_WIDTH;
     rect.w = CELL_HEIGHT;
+
+    double frame_progress;
+    int now = SDL_GetPerformanceCounter();
+    int last = 0;
+    double delta_time = 0;
+
     while (running) {
+        last = now;
+        now = SDL_GetPerformanceCounter();
+        delta_time = (double)((now - last)*1000 / (double)SDL_GetPerformanceFrequency());
+        frame_progress += delta_time;
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
@@ -79,27 +89,30 @@ void MainLoop() {
                 }
             }
         }
-        CalculateGrid();
-        // Draw background
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
+        if (frame_progress >= LOOP_DELAY) {
+            frame_progress -= LOOP_DELAY;
 
-        // Draw cells
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        
-        for (int x = 0; x < GRID_WIDTH; x++) {
-            for (int y = 0; y < GRID_HEIGHT; y++) {
-                if (grid[x][y]) {
-                    rect.x = x * CELL_WIDTH;
-                    rect.y = y * CELL_HEIGHT;
-                    SDL_RenderFillRect(renderer, &rect);
+            CalculateGrid();
+            // Draw background
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+            SDL_RenderClear(renderer);
+
+            // Draw cells
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+            
+            for (int x = 0; x < GRID_WIDTH; x++) {
+                for (int y = 0; y < GRID_HEIGHT; y++) {
+                    if (grid[x][y]) {
+                        rect.x = x * CELL_WIDTH;
+                        rect.y = y * CELL_HEIGHT;
+                        SDL_RenderFillRect(renderer, &rect);
+                    }
                 }
             }
-        }
 
-        // Render
-        SDL_RenderPresent(renderer);
-        SDL_Delay(LOOP_DELAY);
+            // Render
+            SDL_RenderPresent(renderer);
+        }
     }
 }
 
