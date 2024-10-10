@@ -5,10 +5,10 @@ Conway's Game of Life written in C and rendered with SDL2.
 The only dependency is SDL2.
 
 ## Building
-To build, simply run the build.sh script in the root directory of the repository.
+To build, simply run make in the root directory of the repository.
 ```bash
-bash build.sh
+make
 ```
 
 ## Running
-After building with build.sh, simply run ./bin/main
+After running make, simply run ./bin/sdl-conway
